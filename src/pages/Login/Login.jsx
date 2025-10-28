@@ -1,23 +1,52 @@
 import React from 'react'
+import {useState} from 'react'
 import './Login.css'
 import logo from '../../assets/logo.png'
+import { login, signup } from '../../firebase'
+import netflix_spinner from '../../assets/netflix_spinner.gif'
 
 const Login = () => {
 
-const [signState, setSignState] = React.useState('sign In');
+const [signState, setSignState] = useState("Sign In");
+const [name,setName] = useState("");
+const [email,setEmail] = useState("");
+const [password,setPassword] = useState("");
+const [loading,setLoading] = useState(false);
 
+
+
+const user_auth = async (event) =>  {
+  event.preventDefault();
+  setLoading (true);
+  if(signState === "Sign In"){
+    await login(email, password )
+  }else{
+    await signup(name,email,password)
+  }
+  setLoading (false);
+}
 
   return (
+    loading ? <div className='login-spinner'>
+      <img src={netflix_spinner} alt="spinner" />
+    </div> :
     <div className='login'>
       <img src={logo} alt="" className='login-logo' />
       <div className='login-form'>
         <h1>{signState}</h1>
-        <form action="">
-          {signState === 'Sign Up' ? <input type="text" placeholder='Enter your name' /> : null}
+        <form action="" onSubmit={user_auth}>         
+           {signState === 'Sign Up' ? 
+          <input  value={name} onChange={(e) => {setName(e.target.value)}}
+          type="text"
+          placeholder='Enter your name' /> : null}
           
-          <input type="email" placeholder='Email or phone number' />
-          <input type="password" placeholder='Password' />
-          <button>{signState}</button>
+          <input value={email} onChange={(e) => {setEmail(e.target.value)}}
+          type="email" 
+          placeholder='Email' />
+          <input  value={password} onChange={(e) => {setPassword(e.target.value) }}
+          type="password"
+          placeholder='Password' />
+          <button onClick={user_auth} type='submit'>{signState}</button>
 
           <div className='form-help'>
             <div className='remember-me'>
@@ -29,7 +58,7 @@ const [signState, setSignState] = React.useState('sign In');
         </form>
       <div className="form-switch">
         {signState === 'Sign Up' ? 
-        <p >Already have an account? <span onClick={() => setSignState('sign In')}>Sign In</span></p> 
+        <p >Already have an account? <span onClick={() => setSignState('Sign In')}>Sign In</span></p> 
         : <p>New to Netflix? <span onClick={() => setSignState('Sign Up')}>Sign Up</span></p>}       
       </div>
     </div>
