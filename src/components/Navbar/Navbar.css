@@ -78,3 +78,23 @@
   background-color: #141414;
   transition: background-color 0.5s ease-in;
 }
+
+@media (max-width: 800px){
+  .navbar{
+    padding: 20px 4%;
+  }
+  .navbar-left ul{
+    display: none;
+  }
+  .navbar img{
+    height: 30px;
+  }
+}
+@media (max-width: 500px){
+  .navbar img{
+    height: 25px;
+  }
+  .navbar-right{
+    gap: 10px;
+  }
+}
